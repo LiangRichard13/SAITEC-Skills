@@ -1,6 +1,5 @@
 """File Manage Tools - MCP tools for file upload, download and management"""
 import os
-import base64
 import httpx
 from pathlib import Path
 from mcp.server.fastmcp import FastMCP
@@ -38,41 +37,56 @@ def register_file_manage_tools(mcp: FastMCP):
             raise FileNotFoundError(f"File not found: {file_path}")
 
         filename = path.name
-        file_content = base64.b64encode(path.read_bytes()).decode("utf-8")
-
-        payload = {
-            "file_content": file_content,
-            "filename": filename,
-            "file_type": file_type,
-        }
+        file_bytes = path.read_bytes()
 
         async with httpx.AsyncClient(timeout=HTTP_TIMEOUT) as client:
             resp = await client.post(
                 f"{API_BASE}/api/v1/skills/file-manage/upload",
-                json=payload,
+                files={"file": (filename, file_bytes, "application/octet-stream")},
+                data={"file_type": file_type},
                 headers=_headers(),
             )
             resp.raise_for_status()
             return resp.json()
 
     @mcp.tool()
-    async def download_file(file_id: str) -> dict:
+    async def download_file(file_id: str, file_path: str) -> dict:
         """
-        Download a file by file_id.
+        Download a file by file_id and save to local path.
 
         Args:
             file_id: The UUID of the file to download.
+            file_path: Local path to save the downloaded file, e.g., '/home/user/downloads/report.pdf'.
 
         Returns:
-            File content as streaming response.
+            Success message with saved file path and size.
         """
+        path = Path(file_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+
         async with httpx.AsyncClient(timeout=HTTP_TIMEOUT) as client:
             resp = await client.get(
                 f"{API_BASE}/api/v1/skills/file-manage/files/{file_id}",
                 headers=_headers(),
             )
             resp.raise_for_status()
-            return resp.json()
+
+            content_type = resp.headers.get("content-type", "application/octet-stream")
+            if "application/json" in content_type:
+                data = resp.json()
+                raise ValueError(f"Unexpected JSON response (file may not exist): {data}")
+
+            with open(path, "wb") as f:
+                async for chunk in resp.aiter_bytes(chunk_size=8192):
+                    f.write(chunk)
+
+        size_bytes = path.stat().st_size
+        return {
+            "success": True,
+            "file_id": file_id,
+            "saved_path": str(path),
+            "size_bytes": size_bytes,
+        }
 
     @mcp.tool()
     async def list_files(
