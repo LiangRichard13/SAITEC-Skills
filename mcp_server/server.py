@@ -15,6 +15,7 @@ from api_tools.safety_eval_tools import register_safety_tools
 from api_tools.corpus_safety_eval_tools import register_corpus_tools
 from api_tools.general_eval_tools import register_general_tools
 from api_tools.file_manage_tools import register_file_manage_tools
+from api_tools.skill_doc_tools import register_skill_doc_tools
 
 register_text_tools(mcp)
 register_image_tools(mcp)
@@ -23,6 +24,7 @@ register_safety_tools(mcp)
 register_corpus_tools(mcp)
 register_general_tools(mcp)
 register_file_manage_tools(mcp)
+register_skill_doc_tools(mcp)
 
 if __name__ == "__main__":
     mcp.run()

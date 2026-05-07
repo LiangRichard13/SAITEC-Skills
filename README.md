@@ -26,15 +26,79 @@ export CORE_API_BASE=http://127.0.0.1:8000
 export SAITEC_API_KEY=你的API密钥
 ```
 
-### 3. 启动 MCP 服务
+### 3. 配置 MCP Server
+
+MCP Server 由客户端自动启动和管理，**无需手动运行**。只需完成配置即可：
 
 ```bash
-python mcp_server/server.py
+claude mcp add SAITEC-Skills /home/lcd/SAITEC-Skills/run_mcp.sh
 ```
+
+> [!NOTE]
+> MCP Server 在需要使用工具时由客户端自动启动，无需手动运行 `python mcp_server/server.py`。
+
+## MCP Server 配置
+
+MCP Server 通过 stdio 模式与客户端通信。以下是各 Agent 工具的配置方式：
+
+### Claude Code
+
+```bash
+claude mcp add SAITEC-Skills /home/lcd/SAITEC-Skills/run_mcp.sh
+```
+
+验证是否添加成功：
+```bash
+claude mcp list
+```
+
+移除 Server：
+```bash
+claude mcp remove SAITEC-Skills
+```
+
+### OpenCode
+
+在 OpenCode 的 MCP 配置文件中添加：
+
+```json
+{
+  "mcpServers": {
+    "SAITEC-Skills": {
+      "command": "/home/lcd/SAITEC-Skills/run_mcp.sh",
+      "disabled": false
+    }
+  }
+}
+```
+
+### Cursor
+
+在 Cursor 的 MCP 配置文件中添加：
+
+```json
+{
+  "mcpServers": {
+    "SAITEC-Skills": {
+      "command": "/home/lcd/SAITEC-Skills/run_mcp.sh"
+    }
+  }
+}
+```
+
+### 其他 Agent 工具
+
+任何支持 stdio 模式的 MCP 客户端都可以使用：
+
+```bash
+/home/lcd/SAITEC-Skills/run_mcp.sh
+```
+
+**注意**：确保 `skills` conda 环境已激活，且环境变量 `CORE_API_BASE` 和 `SAITEC_API_KEY` 已配置。
 
 ## 工具列表
 
-共 29 个 MCP tools，分为 7 个模块。
+共 32 个 MCP tools，分为 8 个模块。
 
 ### Text Detect（文本 AIGC 检测）
 
@@ -99,6 +163,16 @@ python mcp_server/server.py
 | `list_files(skip, limit)` | 列出用户私有文件 |
 | `list_task_files(task_id)` | 列出任务产物文件 |
 
+### Skill Doc（技能文档）
+
+| 工具 | 说明 |
+|------|------|
+| `list_skills()` | 列出所有可用技能文档及描述 |
+| `get_skill_doc(skill_name)` | 获取指定技能文档的完整内容 |
+| `search_skills(query)` | 在所有技能文档中搜索关键词 |
+
+**skill_name 可选值**: `text_detect`, `image_detect`, `video_detect`, `safety_eval`, `corpus_safety_eval`, `general_eval`
+
 ## 安全说明
 
 - 所有工具请求均携带 `X-API-Key` header，密钥从环境变量 `SAITEC_API_KEY` 读取
@@ -110,9 +184,15 @@ python mcp_server/server.py
 ```
 ├── README.md
 ├── requirements.txt
-├── agent_sops/                     # Agent 思考指南（SOP）
-│   ├── aigc_detect_sop.md
-│   └── llm_eval_sop.md
+├── run_mcp.sh                     # MCP Server 启动脚本
+├── SKILL.md                       # 技能总览文档
+├── skills/                        # 各技能详细文档
+│   ├── text_detect.md
+│   ├── image_detect.md
+│   ├── video_detect.md
+│   ├── safety_eval.md
+│   ├── corpus_safety_eval.md
+│   └── general_eval.md
 └── mcp_server/
     ├── server.py                  # MCP 服务入口
     └── api_tools/                 # 各模块工具实现
@@ -123,5 +203,6 @@ python mcp_server/server.py
         ├── safety_eval_tools.py
         ├── corpus_safety_eval_tools.py
         ├── general_eval_tools.py
-        └── file_manage_tools.py
+        ├── file_manage_tools.py
+        └── skill_doc_tools.py     # 技能文档访问工具
 ```
