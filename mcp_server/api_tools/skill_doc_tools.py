@@ -1,4 +1,9 @@
-"""Skill Documentation Tools - MCP tools for accessing skill documentation"""
+"""Skill Documentation Tools - MCP tools for accessing skill documentation
+
+IMPORTANT: Before executing any business operation (detect_image, detect_video,
+create_safety_eval, etc.), you should first call list_skills() or get_skill_doc()
+to read the relevant skill documentation and understand the correct workflow.
+"""
 from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 

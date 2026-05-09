@@ -27,8 +27,14 @@ def register_image_tools(mcp: FastMCP):
         """
         Detect if an image is AI-generated (AIGC detection).
 
+        IMPORTANT: For any operation that requires reading a local image file, you MUST first
+        call the upload_file tool to upload the file to cloud storage, then use the returned
+        storage_uri as the image_uri value.
+
         Args:
-            image_uri: Image path, supports server_path:/path, file:///path, /path formats.
+            image_uri: Image URI, must be the storage_uri returned by upload_file for a file_type
+                of 'image'. Supports server_path:/path, file:///path, /path formats only after
+                the file has been uploaded.
             method: Detection method, 'deepfake_defenders', 'mapnet', or 'tamper_yolo'. Default 'deepfake_defenders'.
             threshold: Decision threshold, default 0.55.
             return_visuals: Whether to return visual results, default True.
@@ -60,8 +66,13 @@ def register_image_tools(mcp: FastMCP):
         """
         Batch detect if multiple images are AI-generated.
 
+        IMPORTANT: For any operation that requires reading local image files, you MUST first
+        call the upload_file tool to upload each file to cloud storage, then use the returned
+        storage_uri values as the image_uri in each item.
+
         Args:
-            items: List of image items, each containing 'id' and 'image_uri'.
+            items: List of image items, each containing 'id' and 'image_uri'. The image_uri
+                must be the storage_uri returned by upload_file for a file_type of 'image'.
             method: Detection method, 'deepfake_defenders', 'mapnet', or 'tamper_yolo'. Default 'tamper_yolo'.
 
         Returns:

@@ -23,11 +23,15 @@ def register_file_manage_tools(mcp: FastMCP):
         file_type: str,
     ) -> dict:
         """
-        Upload a local file to the server (only supports image and dataset types).
+        Upload a local file to the server (only supports image, video and dataset types).
+
+        IMPORTANT: For any operation that requires reading a local file (image, video, dataset),
+        you MUST first call this upload tool to upload the file to cloud storage, then use the
+        returned file link (storage_uri) in the tool parameter for business execution.
 
         Args:
             file_path: Local path to the file, e.g., '/home/user/images/photo.png'.
-            file_type: File type, must be 'image' or 'dataset'.
+            file_type: File type, must be 'image', 'video', or 'dataset'.
 
         Returns:
             File metadata including file_id, sha256, size_bytes, file_type, filename, created_at.

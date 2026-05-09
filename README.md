@@ -156,14 +156,20 @@ claude mcp remove SAITEC-Skills
 
 ### File Manage（文件管理）
 
+**重要**：涉及需要读取本地文件进行业务操作的场景，**必须先调用 `upload_file` 将文件上传至云端**，获取 `storage_uri` 后再使用云端文件链接进行业务操作。
+
 | 工具 | 说明 |
 |------|------|
-| `upload_file(file_path, file_type)` | 上传本地文件（自动 base64 编码） |
-| `download_file(file_id)` | 下载文件 |
+| `upload_file(file_path, file_type)` | 上传本地文件（支持 image/video/dataset），返回 file_id 和 storage_uri |
+| `download_file(file_id, file_path)` | 下载文件到本地路径 |
 | `list_files(skip, limit)` | 列出用户私有文件 |
 | `list_task_files(task_id)` | 列出任务产物文件 |
 
+**file_type 可选值**: `image`, `video`, `dataset`
+
 ### Skill Doc（技能文档）
+
+**重要**：在执行任何业务操作前，应先调用这些工具获取技能文档，了解正确的工作流程。
 
 | 工具 | 说明 |
 |------|------|

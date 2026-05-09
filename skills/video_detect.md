@@ -8,6 +8,17 @@
 
 ---
 
+## 重要：文件上传说明
+
+**涉及需要读取本地文件进行业务操作的场景，必须先调用 `upload_file` 将文件上传至云端，获取 `storage_uri` 后再使用云端文件链接进行业务操作。**
+
+典型流程：
+```
+用户意图 → 上传文件(upload_file) → 获得 storage_uri → 使用 server_path:{storage_uri} 格式作为 URI 参数 → 执行检测
+```
+
+---
+
 ## 可用工具
 
 ### 1. detect_video - 单视频 AIGC 检测

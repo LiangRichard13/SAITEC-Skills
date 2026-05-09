@@ -26,8 +26,14 @@ def register_video_tools(mcp: FastMCP):
         """
         Detect if a video is AI-generated (AIGC detection).
 
+        IMPORTANT: For any operation that requires reading a local video file, you MUST first
+        call the upload_file tool to upload the file to cloud storage, then use the returned
+        storage_uri as the video_uri value.
+
         Args:
-            video_uri: Video path, supports server_path:/path, file:///path, /path formats.
+            video_uri: Video URI, must be the storage_uri returned by upload_file for a file_type
+                of 'video'. Supports server_path:/path, file:///path, /path formats only after
+                the file has been uploaded.
             method: Detection method, default 'video_multihead_attention'.
             threshold: Decision threshold, default 0.55.
 
@@ -56,8 +62,13 @@ def register_video_tools(mcp: FastMCP):
         """
         Batch detect if multiple videos are AI-generated.
 
+        IMPORTANT: For any operation that requires reading local video files, you MUST first
+        call the upload_file tool to upload each file to cloud storage, then use the returned
+        storage_uri values as the video_uri in each item.
+
         Args:
-            items: List of video items, each containing 'id' and 'video_uri'.
+            items: List of video items, each containing 'id' and 'video_uri'. The video_uri
+                must be the storage_uri returned by upload_file for a file_type of 'video'.
 
         Returns:
             Batch detection result with task_id and status.
