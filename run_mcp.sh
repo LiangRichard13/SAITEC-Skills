@@ -4,6 +4,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source ~/miniconda3/etc/profile.d/conda.sh
+# 这里假设你的环境名称为 skills 并在skills中安装了所需的依赖
 conda activate skills
 
 # 环境变量配置

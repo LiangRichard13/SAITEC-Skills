@@ -28,7 +28,21 @@ export SAITEC_API_KEY=你的API密钥
 
 ### 3. 配置 MCP Server
 
-MCP Server 由客户端自动启动和管理，**无需手动运行**。只需完成配置即可：
+编辑 `run_mcp.sh`，填入你的 conda 环境名称和凭证：
+
+```bash
+# run_mcp.sh 第6-8行：conda 环境配置
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate 你的conda环境名称
+
+# run_mcp.sh 第11行：API 鉴权密钥
+export SAITEC_API_KEY=你的API密钥
+
+# run_mcp.sh 第12行：SAITEC Core API 地址
+export CORE_API_BASE=http://127.0.0.1:8000
+```
+
+配置完成后，添加 MCP Server：
 
 ```bash
 claude mcp add SAITEC-Skills /home/lcd/SAITEC-Skills/run_mcp.sh
