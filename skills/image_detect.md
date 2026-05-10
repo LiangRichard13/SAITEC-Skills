@@ -230,30 +230,37 @@
 ### 场景一：单图检测（用户直接提供图片路径）
 
 ```
-用户意图 → 确认图片路径 → 调用 detect_image → 查询结果 → 下载产物（如需要）
+用户意图 → 确认图片路径 → 调用 detect_image → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **确认图片路径**：用户给定的本地路径（如 `/home/user/photo.jpg`）
 2. **调用 detect_image**：传入 `image_uri` 和可选的 `method`
 3. **轮询任务状态**：使用 `get_image_task` 查询直到 `status` 为 `succeeded`
-4. **下载产物（如需要）**：使用 `get_image_task_artifacts` 获取文件列表，再用 `download_file` 下载可视化产物
+4. **返回结果**：向用户展示检测结果（label、score、可视化信息）
+5. **询问用户**：主动询问用户"需要下载可视化产物（如注意力图、篡改区域标注）吗？"
+6. **下载产物（如用户需要）**：
+   - 调用 `get_image_task_artifacts` 获取文件列表
+   - **询问用户确认本地保存路径**（Windows/Linux 路径格式不同）
+   - 调用 `download_file` 下载文件
 
 ### 场景二：批量图片检测
 
 ```
-用户意图 → 确认图片路径列表 → 调用 batch_detect_images → 查询结果 → 下载产物（如需要）
+用户意图 → 确认图片路径列表 → 调用 batch_detect_images → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **确认图片路径**：用户给定的多张本地路径
 2. **构建 items 列表**：按格式组装 `id` + `image_uri`
 3. **调用 batch_detect_images**：传入 `items` 和 `method`
 4. **轮询任务状态**：使用 `get_image_task` 查询
-5. **下载产物（如需要）**：下载 visual_artifacts 查看批量检测结果
+5. **返回结果**：向用户展示批量检测结果摘要
+6. **询问用户**：主动询问用户"需要下载产物吗？"
+7. **下载产物（如用户需要）**：同上
 
 ### 场景三：使用数据集文件（本地图片需先上传）
 
 ```
-用户意图 → 上传本地图片(upload_file) → 获得 storage_uri → 检测(detect_image) → 查询结果 → 下载产物
+用户意图 → 上传本地图片(upload_file) → 获得 storage_uri → 检测(detect_image) → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **上传图片**：调用 `upload_file(file_path=xxx, file_type="image")`

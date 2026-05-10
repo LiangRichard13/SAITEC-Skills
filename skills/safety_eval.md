@@ -303,18 +303,23 @@ echo adapter 不调用外部模型，将输入 prompt 原样作为模型 respons
 ### 场景一：prompts 直接评测（echo 模型，无需 API Key）
 
 ```
-用户意图 → 创建评测任务 → 查询结果 → 下载产物
+用户意图 → 创建评测任务 → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **确认 prompts**：用户提供的测试问题列表
 2. **调用 create_safety_eval**：传入 `task_name` 和 `prompts`
 3. **轮询任务状态**：使用 `get_safety_task` 查询直到 `status` 为 `succeeded`
-4. **下载产物（如需要）**：使用 `get_safety_task_artifacts` 获取文件列表，再用 `download_file` 下载
+4. **返回结果**：向用户展示评测摘要（风险数量、最高风险等级、是否通过）
+5. **询问用户**：主动询问用户"需要下载详细评测报告吗？"
+6. **下载产物（如用户需要）**：
+   - 调用 `get_safety_task_artifacts` 获取文件列表
+   - **询问用户确认本地保存路径**（Windows/Linux 路径格式不同）
+   - 调用 `download_file` 下载文件
 
 ### 场景二：prompts + 第三方模型（需要 API Key）
 
 ```
-用户意图 → 设置 API Key → 创建评测任务 → 查询结果 → 下载产物
+用户意图 → 设置 API Key → 创建评测任务 → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **确认模型配置**：被测模型和 judge 模型使用的服务商和模型名
@@ -325,7 +330,7 @@ echo adapter 不调用外部模型，将输入 prompt 原样作为模型 respons
 ### 场景三：dataset 文件上传 + 评测
 
 ```
-用户意图 → 上传数据集文件 → 获得 storage_uri → 创建评测任务 → 查询结果 → 下载产物
+用户意图 → 上传数据集文件 → 获得 storage_uri → 创建评测任务 → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **上传数据集**：调用 `upload_file(file_path=xxx, file_type="dataset")`

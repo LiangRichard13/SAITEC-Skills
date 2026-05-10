@@ -250,14 +250,34 @@
 ### 标准执行流程（texts 直接评测）
 
 ```
-用户请求 → 判断是否需要设 API Key → 创建评测任务 → 查询结果 → 下载产物
+用户请求 → 判断是否需要设 API Key → 创建评测任务 → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
+
+1. **确认 texts**：用户提供的语料文本列表
+2. **判断是否需要 API Key**：使用 `echo` judge 不需要，使用第三方模型需要
+3. **创建评测任务**：调用 `create_corpus_safety_eval`
+4. **查询结果**：使用 `get_corpus_safety_task` 查询状态
+5. **返回结果**：向用户展示评测摘要（风险数量、最高风险等级）
+6. **询问用户**：主动询问用户"需要下载详细评测报告吗？"
+7. **下载产物（如用户需要）**：
+   - 调用 `get_corpus_safety_task_artifacts` 获取文件列表
+   - **询问用户确认本地保存路径**（Windows/Linux 路径格式不同）
+   - 调用 `download_file` 下载文件
 
 ### 完整执行流程（dataset 文件评测）
 
 ```
-用户请求 → 询问并确认本地文件路径 → 上传 dataset 文件 → 获得 storage_uri → 创建评测任务 → 查询结果 → 询问并确认保存路径 → 下载产物
+用户请求 → 询问并确认本地文件路径 → 上传 dataset 文件 → 获得 storage_uri → 创建评测任务 → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
+
+1. **询问并确认本地文件路径**：Linux/Mac 用户路径以 `/` 开头，Windows 用户路径如 `C:\Users\...`
+2. **上传 dataset 文件**：调用 `upload_file(file_path=xxx, file_type="dataset")`
+3. **获得 storage_uri**：从响应中获取 `storage_uri`
+4. **创建评测任务**：调用 `create_corpus_safety_eval` 传入 dataset 配置
+5. **查询结果**：使用 `get_corpus_safety_task` 查询状态
+6. **返回结果**：向用户展示评测摘要
+7. **询问用户**：主动询问用户"需要下载详细评测报告吗？"
+8. **下载产物（如用户需要）**：同上
 
 ### 何时需要设置 API Key
 

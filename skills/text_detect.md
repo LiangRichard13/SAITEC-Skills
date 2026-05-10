@@ -281,26 +281,32 @@
 ### 场景二：批量文本检测（内联 items）
 
 ```
-用户意图 → 调用 batch_detect_texts(items) → 查询结果 → 下载产物（如需要）
+用户意图 → 调用 batch_detect_texts(items) → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **确认文本列表**：用户提供的多段文本
 2. **构建 items 列表**：按格式组装 `id` + `text`
 3. **调用 batch_detect_texts**：传入 `items`
-4. **查询结果**：直接返回批量检测结果
-5. **下载产物（如需要）**：使用 `get_text_task_artifacts` 获取文件列表
+4. **返回结果**：直接返回批量检测结果
+5. **询问用户**：主动询问用户"需要下载产物报告吗？"
+6. **下载产物（如用户需要）**：
+   - 调用 `get_text_task_artifacts` 获取文件列表
+   - **询问用户确认本地保存路径**（Windows/Linux 路径格式不同）
+   - 调用 `download_file` 下载文件
 
 ### 场景三：批量文本检测（dataset 文件上传）
 
 ```
-用户意图 → 上传数据集文件 → 获得 storage_uri → 调用 batch_detect_texts(dataset) → 查询结果 → 下载产物
+用户意图 → 上传数据集文件 → 获得 storage_uri → 调用 batch_detect_texts(dataset) → 查询结果 → 询问用户是否需要下载产物 → 下载产物
 ```
 
 1. **上传数据集**：调用 `upload_file(file_path=xxx, file_type="dataset")`
 2. **获得 storage_uri**：从响应中获取 `storage_uri`
 3. **构建 dataset 配置**：按格式组装 `source_type`、`path`、`file_format`、`data_format`
 4. **调用 batch_detect_texts**：传入 `dataset` 参数
-5. **后续流程同场景二**
+5. **返回结果**：直接返回批量检测结果
+6. **询问用户**：主动询问用户"需要下载产物报告吗？"
+7. **下载产物（如用户需要）**：同上
 
 ---
 
