@@ -32,15 +32,23 @@ def register_general_tools(mcp: FastMCP):
         """
         Create a general LLM capability evaluation task.
 
+        IMPORTANT: Parameters must be passed as native JSON types:
+        - array parameters: pass as JSON array, not "[\"item\"]"
+        - object parameters: pass as JSON object, not "{\"key\": \"value\"}"
+
         Args:
             task_name: Task ID, recommended to be unique.
             model_name: Model under test display name, default 'echo'.
             judge_model_name: Judge model display name, default 'echo'.
             prompts: String list for direct input (mutually exclusive with dataset).
+                Must be a JSON array, e.g., ["prompt1", "prompt2"].
             dataset: Batch input with source_type/path/file_format/data_format (mutually exclusive with prompts).
+                Must be a JSON object.
             caller: Model call configuration, adapter_type supports 'openai'/'echo'.
-            judge_caller: Judge model call configuration.
+                Must be a JSON object.
+            judge_caller: Judge model call configuration. Must be a JSON object.
             dimensions: Evaluation dimensions (compatibility field, not used as scoring standard).
+                Must be a JSON array, e.g., ["math_reasoning", "code_generation"].
             evaluation_rubric_text: Evaluation rubric text (compatibility field).
 
         Returns:
@@ -78,10 +86,13 @@ def register_general_tools(mcp: FastMCP):
         """
         Inject runtime credentials for general evaluation.
 
+        IMPORTANT: Parameters must be passed as native JSON types:
+        - bool parameters: pass as true/false, not "true"/"false"
+
         Args:
             env_name: Environment variable name, e.g., 'DEEPSEEK_API_KEY'.
             api_key: API key plaintext.
-            overwrite: Whether to overwrite existing variable, default True.
+            overwrite: Whether to overwrite existing variable, default True. Must be true/false.
 
         Returns:
             Result of credential injection.

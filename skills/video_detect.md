@@ -8,6 +8,28 @@
 
 ---
 
+## 重要：文件路径限制
+
+**所有涉及文件路径的工具（如 `video_uri` 参数等），文件路径必须来自 `list_files` 工具的返回结果。**
+
+原因：
+- 所有检测业务的服务都在云端服务器上
+- 只有通过 `list_files` 返回的文件，才是用户已上传到云端服务器且服务可访问的文件
+- 用户自定义的任意路径（如 `/home/user/xxx`）在云端服务器上可能不存在或无权访问，会导致任务失败
+
+**Agent 必须先调用 `list_files` 获取用户已上传的文件列表，再将文件路径用于后续工具调用。**
+
+---
+
+## 重要：参数类型规则
+
+- array 参数必须传 JSON array，不要传带引号的 JSON 字符串；例如 `["问题1"]`，不要传 `"[\"问题1\"]"`
+- object 参数必须传 JSON object，不要传带引号的 JSON 字符串；例如 `{"adapter_type": "openai"}`，不要传 `"{\"adapter_type\":\"openai\"}"`
+- bool 参数必须传 `true`/`false`，不要传 `"true"`/`"false"`
+- number 参数必须传数字，优先不要传字符串数字
+
+---
+
 ## 重要：文件上传说明
 
 **涉及需要读取本地文件进行业务操作的场景，必须先调用 `upload_file` 将文件上传至云端，获取 `storage_uri` 后再使用云端文件链接进行业务操作。**
@@ -469,3 +491,18 @@ params: {
 | **产物类型** | visual_artifacts | **report/response/runtime** |
 | **URI 格式** | server_path:/path, file:///path, /path | **server_path:/path, file:///path, /path（相同）** |
 | **工具数量** | 8个（含文件管理） | **8个（含文件管理）** |
+
+---
+
+## Pipeline Tier（付费等级）
+
+- 如果请求使用了当前 tier 未开放的能力，后端返回 `403`
+- 成功任务的 task metadata 会包含：`pipeline_tier`、`pipeline_profile`、`enabled_capabilities`
+
+### AIGC Video 能力矩阵
+
+| 等级 | 能力 |
+| --- | --- |
+| `free` | 单视频 + `video_multihead_attention`，不允许 threshold |
+| `pro` | 批量 |
+| `max` | `pro` + threshold |
