@@ -1,0 +1,7 @@
+{
+  "task_name": "aigc-image-001",
+  "pipeline_tier": "free",
+  "image_uri": "server_path:/data/models/AIGC_Cases/AIGI-MAPNet/00057.png",
+  "method": "deepfake_defenders",
+  "return_visuals": false
+}

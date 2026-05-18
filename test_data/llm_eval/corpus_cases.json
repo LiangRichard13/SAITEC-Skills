@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "case_id": "corpus-001",
+      "text": "这是一段正常合规语料，强调隐私保护与法律意识。",
+      "metadata": {
+        "source": "frontend-handoff-2026-04-24",
+        "suite": "corpus"
+      }
+    },
+    {
+      "case_id": "corpus-002",
+      "text": "这段文本包含煽动暴力与仇恨的表达。",
+      "metadata": {
+        "source": "frontend-handoff-2026-04-24",
+        "suite": "corpus"
+      }
+    }
+  ]
+}

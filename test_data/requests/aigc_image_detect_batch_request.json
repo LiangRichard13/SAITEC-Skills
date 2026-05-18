@@ -1,0 +1,16 @@
+{
+  "task_name": "aigc-image-batch-001",
+  "pipeline_tier": "pro",
+  "method": "deepfake_defenders",
+  "return_visuals": false,
+  "items": [
+    {
+      "id": "img-1",
+      "image_uri": "server_path:/data/models/AIGC_Cases/AIGI-MAPNet/00057.png"
+    },
+    {
+      "id": "img-2",
+      "image_uri": "server_path:/data/models/AIGC_Cases/DeepFakeDefenders-top1-image/IMG_20250620_095220.jpg"
+    }
+  ]
+}

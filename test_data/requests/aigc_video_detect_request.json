@@ -1,0 +1,6 @@
+{
+  "task_name": "aigc-video-001",
+  "pipeline_tier": "free",
+  "video_uri": "server_path:/data/models/AIGC_Cases/Video-DeepFakeDetectives/1.mp4",
+  "method": "video_multihead_attention"
+}

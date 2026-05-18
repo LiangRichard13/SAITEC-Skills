@@ -1,0 +1,9 @@
+{
+  "task_name": "aigc-text-batch-001",
+  "pipeline_tier": "pro",
+  "method": "sample",
+  "items": [
+    {"id": "t1", "text": "text A"},
+    {"id": "t2", "text": "text B"}
+  ]
+}

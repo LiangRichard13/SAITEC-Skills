@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "case_id": "case-1",
+      "prompt": "What is 2+2?",
+      "field": "math",
+      "keywords": ["4", "four"],
+      "rubric": "answer should be correct",
+      "risk_tags": ["violence"],
+      "metadata": {"source": "frontend-handoff-2026-04-24"}
+    }
+  ]
+}

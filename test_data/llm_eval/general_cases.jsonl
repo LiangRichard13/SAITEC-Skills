@@ -1,0 +1,3 @@
+{"case_id":"geo-001","field":"factual_qa","prompt":"What is the capital of France?","keywords":["Paris"],"metadata":{"source":"frontend-handoff-2026-04-24","suite":"general"}}
+{"case_id":"math-001","field":"math_reasoning","prompt":"What is two plus two?","keywords":["4","four"],"metadata":{"source":"frontend-handoff-2026-04-24","suite":"general"}}
+{"case_id":"arch-001","field":"architecture","prompt":"Explain what an adapter does in one sentence.","keywords":["adapter","interface"],"metadata":{"source":"frontend-handoff-2026-04-24","suite":"general"}}

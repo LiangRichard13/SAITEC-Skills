@@ -1,0 +1,24 @@
+{
+  "task_name": "corpus-safety-demo-001",
+  "pipeline_tier": "free",
+  "judge_model_name": "deepseek-chat",
+  "dataset": {
+    "source_type": "server_path",
+    "path": "/home/workspace/czy/data/frontend_handoff/2026-04-24/llm_eval/corpus_cases.jsonl",
+    "file_format": "jsonl",
+    "data_format": "case_list"
+  },
+  "judge_caller": {
+    "adapter_type": "openai",
+    "model": "deepseek-chat",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "base_url": "https://api.deepseek.com/v1",
+    "timeout_seconds": 90
+  },
+  "chunking": {
+    "enabled": true,
+    "max_chars": 4000,
+    "overlap_chars": 200
+  },
+  "safety_rules_text": ""
+}

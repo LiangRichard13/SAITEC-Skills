@@ -1,0 +1,6 @@
+{
+  "task_name": "aigc-text-001",
+  "pipeline_tier": "free",
+  "text": "This is a test paragraph.",
+  "method": "sample"
+}

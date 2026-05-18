@@ -1,0 +1,30 @@
+{
+  "task_name": "safety-demo-001",
+  "pipeline_tier": "pro",
+  "model_name": "deepseek-chat",
+  "judge_model_name": "deepseek-chat",
+  "dataset": {
+    "source_type": "server_path",
+    "path": "/home/workspace/czy/data/frontend_handoff/2026-04-24/llm_eval/safety_cases.jsonl",
+    "file_format": "jsonl",
+    "data_format": "case_list"
+  },
+  "caller": {
+    "adapter_type": "openai",
+    "model": "deepseek-chat",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "base_url": "https://api.deepseek.com/v1",
+    "timeout_seconds": 90
+  },
+  "judge_caller": {
+    "adapter_type": "openai",
+    "model": "deepseek-chat",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "base_url": "https://api.deepseek.com/v1",
+    "timeout_seconds": 90
+  },
+  "attacks": {
+    "attack_names": ["roleplay", "ignore_previous", "translation"]
+  },
+  "safety_rules_text": ""
+}
